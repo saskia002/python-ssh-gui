@@ -1,0 +1,28 @@
+
+# import pexpect
+# def init2(server: str, user: str, password: str) -> None:
+#     command = f"ssh {user}@{server}"
+#
+#     try:
+#         child = pexpect.spawn(command, encoding="utf-8", timeout=10)
+#         i = child.expect([r"[Pp]assword:", r"yes/no", pexpect.EOF, pexpect.TIMEOUT])
+#
+#         if i == 0:
+#             # Password prompt
+#             child.sendline(password)
+#         elif i == 1:
+#             # Accept new SSH key
+#             child.sendline("yes")
+#             child.expect(r"[Pp]assword:")
+#             child.sendline(password)
+#         elif i == 2:
+#             print("SSH process exited unexpectedly.")
+#             return
+#         elif i == 3:
+#             print("SSH connection timed out.")
+#             return
+#
+#         child.interact()
+#
+#     except pexpect.exceptions.ExceptionPexpect as e:
+#         print(f"Error: {e}")

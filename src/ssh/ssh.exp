@@ -1,0 +1,58 @@
+#!/usr/bin/expect -f
+# Usage: ./ssh.exp 192.168.1.11 user password
+# Deps: sudo dnf install -y expect
+
+set server 		[lindex $argv 0]
+set user   		[lindex $argv 1]
+set password   	[lindex $argv 2]
+
+set max_retries 	5
+set try 			0
+
+while {$try < $max_retries} {
+    incr try
+    puts "Connecting to $user@$server (attempt $try)"
+
+    spawn ssh $user@$server
+    match_max 100000
+
+    expect {
+        "*yes/no*" {
+            send "yes\r"
+            exp_continue
+        }
+        
+        "*?password:*" {
+            send -- "$password\r"
+            exp_continue
+
+        }
+        
+		"*\$*" {
+			interact
+			exit 0
+		}
+
+        "*Permission denied*" {
+            puts "Authentication failed. Retrying..."
+            continue
+        }
+
+        timeout {
+            puts "Connection timed out. Exiting..."
+            exit 1
+        }
+
+        eof {
+            puts "Connection closed unexpectedly (eof). Exiting..."
+			exit 1
+        }
+    }
+}
+
+if {$max_retries == $try} {
+    puts "Max retries reached. Exiting..."
+    exit 1
+}
+
+exit 0
