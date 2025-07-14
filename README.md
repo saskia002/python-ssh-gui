@@ -2,19 +2,24 @@
 
 ## Run the app
 
-install uv: `pip install uv`
-install expect: `sudo dnf install -y expect`
+install uv: ``pip install uv``
 
-start project:
+install expect: ``sudo dnf install -y expect``
+
+### Start project:
 
 ```uv venv```
+
 ```source ./venv/bin/activate```
-```uv pip install -e .``` or ```uv pip install -r requirements.txt ```
+
+```uv pip install -e .``` or ```uv pip install -r requirements.txt```
+
 ```flet run```
 
 ---
 
 ```uv pip install -r requirements.txt```
+
 ```pip freeze > requirements.txt```
 
 For more details on running the app, refer to the [Getting Started Guide](https://flet.dev/docs/getting-started/).
