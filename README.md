@@ -2,11 +2,15 @@
 
 ## Run the app
 
-enable venv
 
-``source ./venv/bin/activate``
-``uv sync ``
-``flet run``
+```uv venv```
+```source ./venv/bin/activate```
+```uv pip install -e .``` or ```uv pip install -r requirements.txt ```
+```flet run```
+
+---
+
+```uv pip install -r requirements.txt```
 
 For more details on running the app, refer to the [Getting Started Guide](https://flet.dev/docs/getting-started/).
 
