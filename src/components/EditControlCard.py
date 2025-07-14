@@ -2,15 +2,12 @@ import flet as ft
 
 
 class EditControlCard(ft.Card):
-
-
     EDIT_ON_TOOLTIP = "Edit connections"
     EDIT_OFF_TOOLTIP = "Stop editing connections"
 
-
     def __init__(
-        self,
-        on_click: callable = None,
+            self,
+            on_click: callable = None,
     ):
         self.on_click = on_click
         self.edit_last_state = False
@@ -25,7 +22,7 @@ class EditControlCard(ft.Card):
         )
 
         super().__init__(
-            content=ft.Container(
+            ft.Container(
                 content=self.icon_button,
                 expand=True,
                 alignment=ft.alignment.center,

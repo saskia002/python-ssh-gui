@@ -9,7 +9,10 @@ def main(page: ft.Page):
     connections = connection_cache.load()
     action_mode: Literal["NORMAL", "EDIT"] = "NORMAL"
 
-    cards_column = ft.Column(expand=True, scroll=ft.ScrollMode.ADAPTIVE,)
+    # Less responsive way of wrapping elements like with flex box:
+    #   ft.Row(expand=True, spacing=8, wrap=True, scroll=ft.ScrollMode.ADAPTIVE)
+    #   and fix child component width
+    cards_column = ft.ResponsiveRow(expand=True, spacing=8)
 
     def render_cards():
         cards_column.controls = [ConnectionCard(connection, action_mode) for connection in connections]
@@ -42,15 +45,16 @@ def main(page: ft.Page):
     page.window.center()
     page.update()
 
-
     if not f"{distro.name()} {distro.version()}".startswith("Fedora Linux 42"):
         page.add(
             ft.SafeArea(
                 ft.Container(
                     ft.Card(
                         ft.Container(
-                            ft.Text("Please install Fedora Linux 42 to use the SSH Connection Manager",
-                                    theme_style=ft.TextThemeStyle.TITLE_MEDIUM),
+                            ft.Text(
+                                "Please install Fedora Linux 42 to use the SSH Connection Manager",
+                                theme_style=ft.TextThemeStyle.TITLE_MEDIUM
+                            ),
                             padding=ft.padding.only(top=16, right=24, bottom=16, left=24),
                         ),
                     ),
@@ -78,7 +82,11 @@ def main(page: ft.Page):
         padding=ft.padding.only(left=10, top=10, right=10),
     )
 
-    cards: ft.Container = cards_column
+    cards: ft.Column = ft.Column(
+        [cards_column],
+        scroll=ft.ScrollMode.ADAPTIVE,
+        expand=True
+    )
 
     controls: ft.Container = ft.Container(
         ft.Row(
@@ -106,7 +114,6 @@ def main(page: ft.Page):
                                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                             ),
                             expand=True,
-
                         )
                     ],
                     expand=True,
@@ -121,4 +128,4 @@ def main(page: ft.Page):
 
 
 if __name__ == "__main__":
-    ft.app(main, view=ft.AppView.WEB_BROWSER, port=8080)
+    ft.app(main, view=ft.AppView.WEB_BROWSER, port=8080, assets_dir="./assets", use_color_emoji=True)
