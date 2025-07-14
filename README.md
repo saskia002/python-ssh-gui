@@ -11,6 +11,7 @@
 ---
 
 ```uv pip install -r requirements.txt```
+```pip freeze > requirements.txt```
 
 For more details on running the app, refer to the [Getting Started Guide](https://flet.dev/docs/getting-started/).
 
