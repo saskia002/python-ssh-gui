@@ -2,6 +2,10 @@
 
 ## Run the app
 
+install uv: `pip install uv`
+install expect: `sudo dnf install -y expect`
+
+start project:
 
 ```uv venv```
 ```source ./venv/bin/activate```
