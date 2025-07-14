@@ -10,7 +10,7 @@ def main(page: ft.Page):
         ...
 
     page.title = "SSH Connection Manager"
-    page.theme = ft.Theme(color_scheme_seed=ft.Colors.PURPLE)
+    page.theme = ft.Theme(color_scheme_seed=ft.Colors.DEEP_PURPLE)
     page.window.max_height, page.window.max_width = 1000, 520
     page.window.min_height, page.window.min_width = 0, 520
     page.window.width = 520
@@ -20,8 +20,6 @@ def main(page: ft.Page):
     # page.adaptive = True
     page.window.center()
     page.update()
-
-
 
     if not f"{distro.name()} {distro.version()}".startswith("Fedora Linux 42"):
         page.add(
@@ -41,7 +39,6 @@ def main(page: ft.Page):
         )
         exit(1)
 
-
     connections = connection_cache.load()
 
     page.add(
@@ -52,7 +49,8 @@ def main(page: ft.Page):
                         ft.Column(
                             [
                                 ft.Text("Connect to SSH", theme_style=ft.TextThemeStyle.HEADLINE_SMALL),
-                                ft.Text("Select an existing connection below or create a new one.", theme_style=ft.TextThemeStyle.LABEL_LARGE),
+                                ft.Text("Select an existing connection below or create a new one.",
+                                        theme_style=ft.TextThemeStyle.LABEL_LARGE),
                             ]
                         ),
                         alignment=ft.alignment.top_left,
@@ -65,11 +63,12 @@ def main(page: ft.Page):
                                 ft.Container(
                                     ft.Column(
                                         [
-                                            ft.Text("Add new connection", theme_style=ft.TextThemeStyle.TITLE_MEDIUM),
+                                            ft.Text("Create new connection", theme_style=ft.TextThemeStyle.TITLE_MEDIUM),
                                             ft.Container(
                                                 ft.Column(
                                                     [
-                                                        ft.IconButton(icon=ft.Icons.ADD, on_click=add_connection, icon_size=28)
+                                                        ft.IconButton(icon=ft.Icons.ADD, on_click=add_connection,
+                                                                      icon_size=28)
                                                     ],
 
                                                 ),
@@ -81,7 +80,8 @@ def main(page: ft.Page):
                                     ),
                                     padding=ft.padding.only(top=16, right=16, bottom=12, left=16),
                                 ),
-                                width=500
+                                width=500,
+                                surface_tint_color=ft.Colors.BLUE
                             )
                         ]
                     )

@@ -28,7 +28,7 @@ class ConnectionCard(ft.Card):
             ),
             width=500,
             height=80,
-
+            surface_tint_color=ft.Colors.BLUE
         )
 
     def is_isolated(self):
