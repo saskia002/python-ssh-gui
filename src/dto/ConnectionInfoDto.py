@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class ServerInfoDto:
+class ConnectionInfoDto:
     server: str
     user: str
     password: str

@@ -1,3 +1,3 @@
 __all__ = [
-    "ssh"
+    "fedora_ssh"
 ]

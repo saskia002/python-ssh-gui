@@ -4,8 +4,9 @@
 
 enable venv
 
-`source ./venv/bin/activate`
-`flet run`
+``source ./venv/bin/activate``
+``uv sync ``
+``flet run``
 
 For more details on running the app, refer to the [Getting Started Guide](https://flet.dev/docs/getting-started/).
 
