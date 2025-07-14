@@ -1,25 +1,47 @@
-from components.ConnectionCard import ConnectionCard
+from typing import Literal
+from components import ConnectionCard, EditControlCard, AddControlCard
 from ssh.cache import connection_cache
 import flet as ft
 import distro
 
 
 def main(page: ft.Page):
-    def add_connection(e):
-        print(f"Adding {e}")
+    connections = connection_cache.load()
+    action_mode: Literal["NORMAL", "EDIT"] = "NORMAL"
+
+    cards_column = ft.Column(expand=True, scroll=ft.ScrollMode.ADAPTIVE,)
+
+    def render_cards():
+        cards_column.controls = [ConnectionCard(connection, action_mode) for connection in connections]
+        cards_column.update()
+
+    def add_connection(_e: ft.ControlEvent):
+        print("parent")
+        print(f"Adding {_e}")
         ...
+
+    def edit_connection(_e: ft.ControlEvent):
+        print("parent")
+        nonlocal action_mode
+
+        if action_mode == "EDIT":
+            action_mode = "NORMAL"
+        else:
+            action_mode = "EDIT"
+
+        render_cards()
 
     page.title = "SSH Connection Manager"
     page.theme = ft.Theme(color_scheme_seed=ft.Colors.DEEP_PURPLE)
     page.window.max_height, page.window.max_width = 1000, 520
     page.window.min_height, page.window.min_width = 0, 520
     page.window.width = 520
-    page.scroll = ft.ScrollMode.ADAPTIVE
-    # page.window.resizable = False
+    # page.window.resizable = False  ## This Breaks window re-sizing for some reason Xd ????
     page.window.maximizable = False
-    # page.adaptive = True
+    page.adaptive = True
     page.window.center()
     page.update()
+
 
     if not f"{distro.name()} {distro.version()}".startswith("Fedora Linux 42"):
         page.add(
@@ -39,59 +61,64 @@ def main(page: ft.Page):
         )
         exit(1)
 
-    connections = connection_cache.load()
+    title: ft.Container = ft.Container(
+        ft.Column(
+            [
+                ft.Text(
+                    "Connect to SSH",
+                    theme_style=ft.TextThemeStyle.HEADLINE_SMALL
+                ),
+                ft.Text(
+                    "Select an existing connection below or create a new one.",
+                    theme_style=ft.TextThemeStyle.LABEL_LARGE
+                ),
+            ]
+        ),
+        alignment=ft.alignment.top_left,
+        padding=ft.padding.only(left=10, top=10, right=10),
+    )
+
+    cards: ft.Container = cards_column
+
+    controls: ft.Container = ft.Container(
+        ft.Row(
+            [
+                AddControlCard(on_click=add_connection),
+                EditControlCard(on_click=edit_connection)
+            ],
+            spacing=8
+        )
+    )
 
     page.add(
         ft.SafeArea(
-            ft.Column(
-                [
-                    ft.Container(
-                        ft.Column(
-                            [
-                                ft.Text("Connect to SSH", theme_style=ft.TextThemeStyle.HEADLINE_SMALL),
-                                ft.Text("Select an existing connection below or create a new one.",
-                                        theme_style=ft.TextThemeStyle.LABEL_LARGE),
-                            ]
-                        ),
-                        alignment=ft.alignment.top_left,
-                        padding=ft.padding.only(left=10, top=10, right=10),
-                    ),
-                    ft.Column(
-                        [
-                            ft.Column([ConnectionCard(connection) for connection in connections]),
-                            ft.Card(
-                                ft.Container(
-                                    ft.Column(
-                                        [
-                                            ft.Text("Create new connection", theme_style=ft.TextThemeStyle.TITLE_MEDIUM),
-                                            ft.Container(
-                                                ft.Column(
-                                                    [
-                                                        ft.IconButton(icon=ft.Icons.ADD, on_click=add_connection,
-                                                                      icon_size=28)
-                                                    ],
+            ft.Container(
+                ft.Column(
+                    [
+                        title,
+                        ft.Container(
+                            ft.Column(
+                                [
+                                    cards,
+                                    controls,
+                                ],
+                                expand=True,
+                                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                            ),
+                            expand=True,
 
-                                                ),
-                                                expand=True,
-                                                alignment=ft.alignment.center,
-                                            )
-                                        ],
-
-                                    ),
-                                    padding=ft.padding.only(top=16, right=16, bottom=12, left=16),
-                                ),
-                                width=500,
-                                surface_tint_color=ft.Colors.BLUE
-                            )
-                        ]
-                    )
-                ],
+                        )
+                    ],
+                    expand=True,
+                ),
                 expand=True,
-                spacing=20,
             ),
             expand=True,
-        ),
+        )
     )
 
+    render_cards()
 
-ft.app(main, view=ft.AppView.WEB_BROWSER, port=8080)
+
+if __name__ == "__main__":
+    ft.app(main, view=ft.AppView.WEB_BROWSER, port=8080)

@@ -1,7 +1,7 @@
 from typing import List
 from pathlib import Path
 from util import file
-from dto.ConnectionInfoDto import ConnectionInfoDto
+from dto import ConnectionInfoDto
 import json
 
 
